@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Matrix Messenger</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- АНТИКЭШ (Чтобы браузер всегда тянул новые стили) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css?v=2">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
@@ -1097,7 +1098,6 @@
         try {
             const { error } = await sb.from('messages').insert({ chat_id: cid, from_id: currentUser.id, to_id: currentChatId, text, created_at: new Date().toISOString() });
             if(error) {
-                // Подробный вывод ошибки в консоль
                 console.error('Ошибка при отправке:', error);
                 inp.disabled = false;
                 toast('Ошибка', `Не удалось отправить: ${error.message || error.details || 'Bad Request'}`, 'err');
@@ -1295,7 +1295,7 @@
        HOTKEYS / INIT
     ========================================= */
     document.querySelectorAll('.modal-overlay').forEach(el => el.addEventListener('click', function(e) { if(e.target === this) this.classList.remove('active'); }));
-    console.log('🚀 Matrix Cosmos v1.4 | Обновлена логика отправки!');
+    console.log('🚀 Matrix Cosmos v1.5 | Антикэш фикс!');
 </script>
 </body>
 </html>
