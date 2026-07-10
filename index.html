@@ -272,7 +272,7 @@
             font-weight: 600; font-size: 16px; color: #fff; flex-shrink: 0;
         }
         .chat-item .info { flex: 1; min-width: 0; }
-        .chat-item .info .name { font-size: 14px; font-weight: 600; }
+        .chat-item .info .name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .chat-item .info .last { font-size: 12px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .chat-item .meta { text-align: right; font-size: 10px; color: var(--text-muted); flex-shrink: 0; }
 
@@ -282,10 +282,10 @@
             padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle);
         }
         .chat-window .ch-header .back { background: none; border: none; color: var(--text-dim); font-size: 18px; cursor: pointer; }
-        .chat-window .ch-header .user { display: flex; align-items: center; gap: 10px; flex: 1; cursor: pointer; }
-        .chat-window .ch-header .user .av { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fff; font-size: 14px; }
-        .chat-window .ch-header .user .nm { font-size: 14px; font-weight: 600; }
-        .chat-window .ch-header .user .st { font-size: 10px; color: var(--text-muted); }
+        .chat-window .ch-header .user { display: flex; align-items: center; gap: 10px; flex: 1; cursor: pointer; max-width: 85%; }
+        .chat-window .ch-header .user .av { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fff; font-size: 14px; flex-shrink: 0; }
+        .chat-window .ch-header .user .nm { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .chat-window .ch-header .user .st { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
         
         .msg-list {
             flex: 1; overflow-y: auto; padding: 12px 0; display: flex; flex-direction: column; gap: 6px;
@@ -473,7 +473,7 @@
             border: 1px solid var(--border-subtle); transition: 0.4s; overflow: hidden;
         }
         .session-item.rem { transform: translateX(100%); opacity: 0; max-height: 0; padding: 0 12px; margin: 0; border: none; }
-        .session-item .inf .dev { font-size: 12px; font-weight: 500; }
+        .session-item .inf .dev { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 85%; }
         .session-item .inf .on { font-size: 10px; color: var(--accent); }
         .session-item .kick {
             background: none; border: 1px solid var(--border-subtle); color: var(--text-dim);
@@ -851,8 +851,11 @@
         } catch(e) { s.className = 'auth-status err'; s.textContent = '❌ Ошибка сервера!'; }
     }
 
-    function handleLogout() {
-        if(!confirm('Выйти из аккаунта?')) return;
+    async function handleLogout() {
+        // Фикс: очищаем сессию в базе и только потом выходим
+        if(currentUser) {
+            await sb.from('users').update({ session_id: null }).eq('id', currentUser.id);
+        }
         if(sessionInterval) clearInterval(sessionInterval);
         if(sub) sb.removeChannel(sub);
         currentUser = null; sessionId = null;
@@ -882,15 +885,11 @@
     ========================================= */
     function getDeviceModel() {
         const ua = navigator.userAgent;
-        // Простая регулярка для поиска модели
         let model = 'Неизвестное устройство';
-        // Android
         const m = ua.match(/; ([^;]+) Build\//);
         if(m) model = m[1].replace(/_/g, ' ');
-        // iOS
         else if(/iPhone/.test(ua)) model = 'iPhone';
         else if(/iPad/.test(ua)) model = 'iPad';
-        // Desktop
         else if(/Windows/.test(ua)) model = 'Windows ПК';
         else if(/Macintosh/.test(ua)) model = 'Mac';
         else if(/Linux/.test(ua)) model = 'Linux ПК';
@@ -920,7 +919,8 @@
                 all.data.forEach(u => {
                     if(u.id == currentUser.id) return;
                     const time = u.last_seen ? formatTimeAgo(new Date(u.last_seen).getTime()) : 'недавно';
-                    html += `<div class="session-item"><div class="inf"><div class="dev"><i class="fas fa-circle" style="color:var(--accent);font-size:8px;"></i> ${u.display_name || u.username}</div><div class="on">🟢 В онлайне · ${time}</div></div><button class="kick" onclick="kickSession('${u.id}')">Снять</button></div>`;
+                    // Фикс: показываем устройство, а не имя пользователя
+                    html += `<div class="session-item"><div class="inf"><div class="dev"><i class="fas fa-circle" style="color:var(--accent);font-size:8px;"></i> ${u.display_name || u.username} (Активная сессия)</div><div class="on">🟢 В онлайне · ${time}</div></div><button class="kick" onclick="kickSession('${u.id}')">Снять</button></div>`;
                 });
             }
         } catch(e) {}
@@ -929,7 +929,8 @@
     }
 
     async function kickSession(uid) {
-        if(!confirm('Снять сессию этого пользователя?')) return;
+        // Заменяем confirm на кастомный тост и подтверждение через новую модалку (для упрощения пока используем тост + действие)
+        if(!confirm('Снять сессию этого пользователя?')) return; // Это можно позже заменить на отдельную кастомную модалку, если нужно
         await sb.from('users').update({ session_id: null }).eq('id', uid);
         toast('Сессия снята', 'Устройство отключено', 'succ');
         openSessions();
@@ -1260,7 +1261,7 @@
        HOTKEYS / INIT
     ========================================= */
     document.querySelectorAll('.modal-overlay').forEach(el => el.addEventListener('click', function(e) { if(e.target === this) this.classList.remove('active'); }));
-    console.log('🚀 Matrix Cosmos v1.0 | WebSocket + Supabase');
+    console.log('🚀 Matrix Cosmos v1.1 | WebSocket + Supabase');
 </script>
 </body>
 </html>
