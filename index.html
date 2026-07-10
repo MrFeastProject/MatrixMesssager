@@ -464,7 +464,6 @@
         .session-item.rem { transform: translateX(100%); opacity: 0; max-height: 0; padding: 0 12px; margin: 0; border: none; }
         .session-item .inf .dev { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 85%; }
         
-        /* Стили статуса "В сети" */
         .session-item .inf .on { font-size: 10px; display: flex; align-items: center; gap: 4px; color: var(--accent); }
         .session-item .inf .on .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
         .session-item .inf .off { font-size: 10px; display: flex; align-items: center; gap: 4px; color: var(--text-muted); }
@@ -946,7 +945,6 @@
                 all.data.forEach(u => {
                     if(u.id == currentUser.id) return;
                     const time = u.last_seen ? formatTimeAgo(new Date(u.last_seen).getTime()) : 'недавно';
-                    // Показываем устройство
                     html += `<div class="session-item"><div class="inf"><div class="dev"><i class="fas fa-circle" style="color:var(--accent);font-size:8px;"></i> ${u.display_name || u.username}</div><div class="on"><span class="dot"></span> В онлайне · ${time}</div></div><button class="kick" onclick="kickSession('${u.id}')">Снять</button></div>`;
                 });
             }
@@ -1287,7 +1285,7 @@
        HOTKEYS / INIT
     ========================================= */
     document.querySelectorAll('.modal-overlay').forEach(el => el.addEventListener('click', function(e) { if(e.target === this) this.classList.remove('active'); }));
-    console.log('🚀 Matrix Cosmos v1.2 | WebSocket + Supabase');
+    console.log('🚀 Matrix Cosmos v1.3 | Сообщения летают!');
 </script>
 </body>
 </html>
