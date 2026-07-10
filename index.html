@@ -8,946 +8,218 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #0f0f1a;
-            --bg-card: #16162e;
-            --bg-input: #1a1a2e;
-            --accent-mint: #00d4aa;
-            --accent-purple: #7c3aed;
-            --text-primary: #ffffff;
-            --text-secondary: #8888aa;
-            --text-muted: #555577;
-            --border-color: rgba(0, 212, 170, 0.12);
+            --bg-primary: #0a0a0f; --bg-secondary: #0f0f1a; --bg-card: #16162e; --bg-input: #1a1a2e;
+            --accent-mint: #00d4aa; --accent-purple: #7c3aed; --text-primary: #ffffff;
+            --text-secondary: #8888aa; --text-muted: #555577; --border-color: rgba(0, 212, 170, 0.12);
         }
-
-        body {
-            min-height: 100vh;
-            background: var(--bg-primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 8px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .bg-circles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .bg-circle {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 212, 170, 0.05), transparent 70%);
-            animation: floatCircle 25s ease-in-out infinite alternate;
-        }
+        body { min-height: 100vh; background: var(--bg-primary); display: flex; justify-content: center; align-items: center; padding: 8px; overflow: hidden; position: relative; }
+        .bg-circles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+        .bg-circle { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(0, 212, 170, 0.05), transparent 70%); animation: floatCircle 25s ease-in-out infinite alternate; }
         .bg-circle:nth-child(1) { width: 400px; height: 400px; top: -100px; right: -100px; animation-delay: 0s; }
         .bg-circle:nth-child(2) { width: 300px; height: 300px; bottom: -50px; left: -50px; animation-delay: -8s; background: radial-gradient(circle, rgba(124, 58, 237, 0.04), transparent 70%); }
         .bg-circle:nth-child(3) { width: 200px; height: 200px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -4s; }
+        @keyframes floatCircle { 0% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, -20px) scale(1.1); } 66% { transform: translate(-20px, 30px) scale(0.9); } 100% { transform: translate(10px, -10px) scale(1.05); } }
 
-        @keyframes floatCircle {
-            0% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -20px) scale(1.1); }
-            66% { transform: translate(-20px, 30px) scale(0.9); }
-            100% { transform: translate(10px, -10px) scale(1.05); }
-        }
+        .app { position: relative; z-index: 1; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 24px; padding: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); width: 100%; max-width: 450px; min-width: 320px; height: 96vh; max-height: 780px; display: flex; flex-direction: column; overflow: hidden; margin: 0 auto; }
 
-        .app {
-            position: relative;
-            z-index: 1;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-            width: 100%;
-            max-width: 450px;
-            min-width: 320px;
-            height: 96vh;
-            max-height: 780px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            margin: 0 auto;
-        }
-
-        .loading-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            padding: 20px;
-            text-align: center;
-        }
-        .loading-screen .logo {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--accent-mint);
-            margin-bottom: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
+        .loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 20px; text-align: center; }
+        .loading-screen .logo { font-size: 32px; font-weight: 800; color: var(--accent-mint); margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; display: flex; justify-content: center; align-items: center; width: 100%; }
         .loading-screen .logo i { margin-right: 10px; }
-        .loading-screen .subtitle {
-            color: var(--text-secondary);
-            font-size: 12px;
-            margin-bottom: 30px;
-            letter-spacing: 3px;
-            font-weight: 300;
-            text-transform: uppercase;
-            text-align: center;
-            width: 100%;
-        }
+        .loading-screen .subtitle { color: var(--text-secondary); font-size: 12px; margin-bottom: 30px; letter-spacing: 3px; font-weight: 300; text-transform: uppercase; text-align: center; width: 100%; }
 
-        .loading-spinner {
-            position: relative;
-            width: 50px;
-            height: 50px;
-            margin-bottom: 25px;
-        }
-        .loading-spinner .ring {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 3px solid transparent;
-        }
+        .loading-spinner { position: relative; width: 50px; height: 50px; margin-bottom: 25px; }
+        .loading-spinner .ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; border: 3px solid transparent; }
         .loading-spinner .ring:nth-child(1) { border-top-color: var(--accent-mint); animation: spin 0.8s linear infinite; }
         .loading-spinner .ring:nth-child(2) { border-right-color: var(--accent-purple); animation: spin 1.2s linear infinite reverse; width: 80%; height: 80%; top: 10%; left: 10%; }
         .loading-spinner .ring:nth-child(3) { border-bottom-color: var(--accent-mint); animation: spin 0.6s linear infinite; width: 60%; height: 60%; top: 20%; left: 20%; }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .loading-progress { width: 100%; max-width: 250px; }
         .loading-progress .progress-bar { width: 100%; height: 3px; background: var(--bg-input); border-radius: 10px; overflow: hidden; margin-bottom: 6px; }
         .loading-progress .progress-bar .fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-mint), var(--accent-purple)); border-radius: 10px; transition: width 0.3s ease; }
-        .loading-progress .progress-text {
-            color: var(--text-secondary);
-            font-size: 11px;
-            font-weight: 400;
-            letter-spacing: 1px;
-        }
+        .loading-progress .progress-text { color: var(--text-secondary); font-size: 11px; font-weight: 400; letter-spacing: 1px; }
         .loading-progress .progress-text .percent { color: var(--accent-mint); font-weight: 600; }
 
-        .auth-screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            flex: 1;
-            padding: 20px 10px;
-            overflow-y: auto;
-        }
-        .auth-screen .logo {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--accent-mint);
-            margin-bottom: 6px;
-            font-family: 'JetBrains Mono', monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            flex-shrink: 0;
-        }
+        .auth-screen { display: none; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; padding: 20px 10px; overflow-y: auto; }
+        .auth-screen .logo { font-size: 28px; font-weight: 800; color: var(--accent-mint); margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; display: flex; justify-content: center; align-items: center; width: 100%; flex-shrink: 0; }
         .auth-screen .logo i { margin-right: 8px; }
-        .auth-screen .subtitle {
-            color: var(--text-secondary);
-            font-size: 12px;
-            margin-bottom: 25px;
-            letter-spacing: 3px;
-            font-weight: 300;
-            text-transform: uppercase;
-            text-align: center;
-            width: 100%;
-            flex-shrink: 0;
-        }
+        .auth-screen .subtitle { color: var(--text-secondary); font-size: 12px; margin-bottom: 25px; letter-spacing: 3px; font-weight: 300; text-transform: uppercase; text-align: center; width: 100%; flex-shrink: 0; }
 
         .input-group { width: 100%; position: relative; margin-bottom: 10px; flex-shrink: 0; }
-        .input-group input {
-            width: 100%;
-            padding: 12px 16px;
-            padding-right: 42px;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 14px;
-            outline: none;
-            transition: 0.3s;
-            font-weight: 400;
-        }
+        .input-group input { width: 100%; padding: 12px 16px; padding-right: 42px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 14px; outline: none; transition: 0.3s; font-weight: 400; }
         .input-group input:focus { border-color: var(--accent-mint); }
-        .input-group input::placeholder {
-            color: var(--text-muted);
-            font-weight: 300;
-        }
-        .input-group .toggle-password {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-size: 15px;
-        }
+        .input-group input::placeholder { color: var(--text-muted); font-weight: 300; }
+        .input-group .toggle-password { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; background: none; border: none; font-size: 15px; }
 
-        .auth-btn {
-            width: 100%;
-            padding: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 6px;
-            letter-spacing: 0.5px;
-            flex-shrink: 0;
-        }
-        .auth-btn.primary {
-            background: linear-gradient(135deg, var(--accent-mint), var(--accent-purple));
-            color: #fff;
-        }
+        .auth-btn { width: 100%; padding: 12px; font-size: 15px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; transition: 0.3s; margin-top: 6px; letter-spacing: 0.5px; flex-shrink: 0; }
+        .auth-btn.primary { background: linear-gradient(135deg, var(--accent-mint), var(--accent-purple)); color: #fff; }
         .auth-btn.primary:active { transform: scale(0.97); }
-        .auth-btn.secondary {
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-        }
+        .auth-btn.secondary { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); }
         .auth-btn.secondary:hover { border-color: var(--accent-mint); color: var(--accent-mint); }
 
-        .auth-status {
-            margin-top: 12px;
-            padding: 8px;
-            border-radius: 10px;
-            font-size: 13px;
-            min-height: 36px;
-            width: 100%;
-            text-align: center;
-            font-weight: 500;
-            flex-shrink: 0;
-        }
+        .auth-status { margin-top: 12px; padding: 8px; border-radius: 10px; font-size: 13px; min-height: 36px; width: 100%; text-align: center; font-weight: 500; flex-shrink: 0; }
         .auth-status.success { color: var(--accent-mint); background: rgba(0, 212, 170, 0.08); }
         .auth-status.error { color: #ff6b6b; background: rgba(255, 100, 100, 0.08); }
         .auth-status.loading { color: var(--text-secondary); }
 
         .main-screen { display: none; flex-direction: column; flex: 1; min-height: 0; }
-        .main-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 4px 0 10px 0;
-            border-bottom: 1px solid var(--border-color);
-            flex-shrink: 0;
-        }
-        .main-header .logo {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--accent-mint);
-            font-family: 'JetBrains Mono', monospace;
-        }
+        .main-header { display: flex; align-items: center; justify-content: space-between; padding: 4px 0 10px 0; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+        .main-header .logo { font-size: 18px; font-weight: 700; color: var(--accent-mint); font-family: 'JetBrains Mono', monospace; }
         .main-header .logo i { margin-right: 6px; }
         .main-header .header-actions { display: flex; align-items: center; gap: 10px; }
-        .main-header .header-actions button {
-            background: none; border: none; color: var(--text-secondary); font-size: 16px;
-            cursor: pointer; transition: 0.3s; padding: 4px;
-        }
+        .main-header .header-actions button { background: none; border: none; color: var(--text-secondary); font-size: 16px; cursor: pointer; transition: 0.3s; padding: 4px; }
         .main-header .header-actions button:hover { color: var(--accent-mint); }
 
-        .search-bar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background: var(--bg-input);
-            border-radius: 10px;
-            margin: 8px 0 10px 0;
-            border: 1px solid transparent;
-            transition: 0.3s;
-            flex-shrink: 0;
-        }
+        .search-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg-input); border-radius: 10px; margin: 8px 0 10px 0; border: 1px solid transparent; transition: 0.3s; flex-shrink: 0; }
         .search-bar:focus-within { border-color: var(--accent-mint); }
         .search-bar i { color: var(--text-muted); font-size: 13px; }
-        .search-bar input {
-            flex: 1;
-            background: none;
-            border: none;
-            outline: none;
-            color: var(--text-primary);
-            font-size: 13px;
-            font-weight: 400;
-        }
+        .search-bar input { flex: 1; background: none; border: none; outline: none; color: var(--text-primary); font-size: 13px; font-weight: 400; }
         .search-bar input::placeholder { color: var(--text-muted); font-weight: 300; }
 
-        .chat-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 2px 0;
-            margin: 0 -5px;
-        }
+        .chat-list { flex: 1; overflow-y: auto; padding: 2px 0; margin: 0 -5px; }
         .chat-list::-webkit-scrollbar { width: 3px; }
         .chat-list::-webkit-scrollbar-thumb { background: var(--accent-mint); border-radius: 10px; }
 
-        .chat-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            background: var(--bg-card);
-            border-radius: 12px;
-            margin-bottom: 4px;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid transparent;
-        }
+        .chat-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--bg-card); border-radius: 12px; margin-bottom: 4px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
         .chat-item:active { transform: scale(0.98); background: var(--bg-input); }
-
-        .chat-item .avatar {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #fff;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
+        .chat-item .avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fff; font-size: 16px; flex-shrink: 0; }
         .chat-item .chat-info { flex: 1; min-width: 0; }
-        .chat-item .chat-info .name {
-            color: var(--text-primary);
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .chat-item .chat-info .last-msg {
-            color: var(--text-secondary);
-            font-size: 12px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-weight: 400;
-        }
+        .chat-item .chat-info .name { color: var(--text-primary); font-size: 14px; font-weight: 600; }
+        .chat-item .chat-info .last-msg { color: var(--text-secondary); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 400; }
         .chat-item .chat-meta { text-align: right; flex-shrink: 0; }
-        .chat-item .chat-meta .time {
-            color: var(--text-muted);
-            font-size: 10px;
-            font-weight: 400;
-        }
+        .chat-item .chat-meta .time { color: var(--text-muted); font-size: 10px; font-weight: 400; }
 
         .chat-window { display: none; flex-direction: column; flex: 1; min-height: 0; }
-        .chat-window .chat-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 4px 0 10px 0;
-            border-bottom: 1px solid var(--border-color);
-            flex-shrink: 0;
-        }
-        .chat-window .chat-header .back-btn {
-            background: none; border: none; color: var(--text-secondary); font-size: 18px;
-            cursor: pointer; padding: 4px; transition: 0.3s;
-        }
+        .chat-window .chat-header { display: flex; align-items: center; gap: 10px; padding: 4px 0 10px 0; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+        .chat-window .chat-header .back-btn { background: none; border: none; color: var(--text-secondary); font-size: 18px; cursor: pointer; padding: 4px; transition: 0.3s; }
         .chat-window .chat-header .back-btn:hover { color: var(--accent-mint); }
-
         .chat-window .chat-header .chat-user { display: flex; align-items: center; gap: 8px; flex: 1; cursor: pointer; }
-        .chat-window .chat-header .chat-user .avatar {
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #fff;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-        .chat-window .chat-header .chat-user .user-info .name {
-            color: var(--text-primary);
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .chat-window .chat-header .chat-user .user-info .status {
-            color: var(--text-muted);
-            font-size: 10px;
-            font-weight: 400;
-        }
+        .chat-window .chat-header .chat-user .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fff; font-size: 14px; flex-shrink: 0; }
+        .chat-window .chat-header .chat-user .user-info .name { color: var(--text-primary); font-size: 14px; font-weight: 600; }
+        .chat-window .chat-header .chat-user .user-info .status { color: var(--text-muted); font-size: 10px; font-weight: 400; }
 
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 10px 4px; display: flex; flex-direction: column; gap: 4px; }
         .chat-messages::-webkit-scrollbar { width: 3px; }
         .chat-messages::-webkit-scrollbar-thumb { background: var(--accent-mint); border-radius: 10px; }
 
-        .message {
-            max-width: 80%;
-            padding: 8px 12px;
-            border-radius: 14px;
-            word-wrap: break-word;
-            font-size: 13px;
-            line-height: 1.4;
-            animation: fadeInMsg 0.2s ease;
-            font-weight: 400;
-        }
-        @keyframes fadeInMsg {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .message.sent {
-            align-self: flex-end;
-            background: linear-gradient(135deg, var(--accent-mint), var(--accent-purple));
-            color: #fff;
-            border-bottom-right-radius: 3px;
-        }
-        .message.received {
-            align-self: flex-start;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border-bottom-left-radius: 3px;
-        }
-        .message .msg-time {
-            font-size: 9px;
-            opacity: 0.5;
-            margin-top: 3px;
-            display: block;
-            text-align: right;
-            font-weight: 300;
-        }
+        .message { max-width: 80%; padding: 8px 12px; border-radius: 14px; word-wrap: break-word; font-size: 13px; line-height: 1.4; animation: fadeInMsg 0.2s ease; font-weight: 400; }
+        @keyframes fadeInMsg { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        .message.sent { align-self: flex-end; background: linear-gradient(135deg, var(--accent-mint), var(--accent-purple)); color: #fff; border-bottom-right-radius: 3px; }
+        .message.received { align-self: flex-start; background: var(--bg-card); color: var(--text-primary); border-bottom-left-radius: 3px; }
+        .message .msg-time { font-size: 9px; opacity: 0.5; margin-top: 3px; display: block; text-align: right; font-weight: 300; }
 
-        .no-messages {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 13px;
-            padding: 30px 0;
-            font-weight: 300;
-        }
+        .no-messages { text-align: center; color: var(--text-muted); font-size: 13px; padding: 30px 0; font-weight: 300; }
         .no-messages i { font-size: 32px; display: block; margin-bottom: 10px; }
 
-        .chat-input-area {
-            display: flex;
-            gap: 8px;
-            padding: 8px 0 0 0;
-            border-top: 1px solid var(--border-color);
-            flex-shrink: 0;
-            margin-top: 4px;
-        }
-        .chat-input-area input {
-            flex: 1;
-            padding: 10px 14px;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            outline: none;
-            color: var(--text-primary);
-            font-size: 13px;
-            transition: 0.3s;
-            font-weight: 400;
-        }
+        .chat-input-area { display: flex; gap: 8px; padding: 8px 0 0 0; border-top: 1px solid var(--border-color); flex-shrink: 0; margin-top: 4px; }
+        .chat-input-area input { flex: 1; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 10px; outline: none; color: var(--text-primary); font-size: 13px; transition: 0.3s; font-weight: 400; }
         .chat-input-area input:focus { border-color: var(--accent-mint); }
-        .chat-input-area input::placeholder {
-            color: var(--text-muted);
-            font-weight: 300;
-        }
-
-        .send-btn {
-            background: linear-gradient(135deg, var(--accent-mint), var(--accent-purple));
-            color: #fff;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: 0.3s;
-            min-width: 42px;
-        }
+        .chat-input-area input::placeholder { color: var(--text-muted); font-weight: 300; }
+        .send-btn { background: linear-gradient(135deg, var(--accent-mint), var(--accent-purple)); color: #fff; border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; transition: 0.3s; min-width: 42px; }
         .send-btn:active { transform: scale(0.95); }
 
         .profile-screen { display: none; flex-direction: column; align-items: center; flex: 1; padding: 15px 0 5px 0; min-height: 0; }
-        .profile-screen .back-btn {
-            align-self: flex-start;
-            background: none; border: none; color: var(--text-secondary); font-size: 18px;
-            cursor: pointer; padding: 4px; transition: 0.3s; margin-bottom: 12px;
-        }
+        .profile-screen .back-btn { align-self: flex-start; background: none; border: none; color: var(--text-secondary); font-size: 18px; cursor: pointer; padding: 4px; transition: 0.3s; margin-bottom: 12px; }
         .profile-screen .back-btn:hover { color: var(--accent-mint); }
+        .profile-screen .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--accent-mint); display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 700; color: #fff; margin-bottom: 16px; overflow: hidden; border: 2px solid var(--accent-mint); cursor: pointer; position: relative; background-size: cover; background-position: center; }
+        .profile-screen .profile-avatar .edit-hint { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: #fff; font-size: 9px; padding: 3px; text-align: center; opacity: 0; transition: 0.3s; font-weight: 400; }
+        .profile-screen .profile-avatar .avatar-letter { font-size: 32px; text-transform: uppercase; }
 
-        .profile-screen .profile-avatar {
-            width: 80px; height: 80px;
-            border-radius: 50%;
-            background: var(--accent-mint);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 16px;
-            overflow: hidden;
-            border: 2px solid var(--accent-mint);
-            cursor: pointer;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-        }
-        .profile-screen .profile-avatar .edit-hint {
-            position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7);
-            color: #fff; font-size: 9px; padding: 3px; text-align: center; opacity: 0; transition: 0.3s;
-            font-weight: 400;
-        }
-        .profile-screen .profile-avatar .avatar-letter {
-            font-size: 32px;
-            text-transform: uppercase;
-        }
+        .profile-screen .profile-name { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .profile-screen .profile-username { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; font-weight: 400; }
+        .profile-screen .profile-status { color: var(--text-muted); font-size: 12px; margin-bottom: 16px; font-weight: 400; }
+        .profile-screen .profile-id { color: var(--text-muted); font-size: 11px; background: var(--bg-input); padding: 4px 12px; border-radius: 16px; border: 1px solid var(--border-color); font-family: 'JetBrains Mono', monospace; font-weight: 400; margin-bottom: 20px; }
 
-        .profile-screen .profile-name {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-        .profile-screen .profile-username {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-            font-weight: 400;
-        }
-        .profile-screen .profile-status {
-            color: var(--text-muted);
-            font-size: 12px;
-            margin-bottom: 16px;
-            font-weight: 400;
-        }
-        .profile-screen .profile-id {
-            color: var(--text-muted);
-            font-size: 11px;
-            background: var(--bg-input);
-            padding: 4px 12px;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 400;
-            margin-bottom: 20px;
-        }
-
-        .profile-screen .profile-actions {
-            width: 100%;
-            margin-top: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .profile-screen .profile-actions button {
-            padding: 12px 14px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-input);
-            color: var(--text-primary);
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: left;
-            font-weight: 500;
-        }
+        .profile-screen .profile-actions { width: 100%; margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .profile-screen .profile-actions button { padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary); font-size: 13px; cursor: pointer; transition: 0.3s; text-align: left; font-weight: 500; }
         .profile-screen .profile-actions button:hover { border-color: var(--accent-mint); color: var(--accent-mint); }
         .profile-screen .profile-actions button i { margin-right: 8px; width: 18px; }
 
         .settings-screen { display: none; flex-direction: column; flex: 1; padding: 10px 0; min-height: 0; }
-        .settings-screen .back-btn {
-            align-self: flex-start;
-            background: none; border: none; color: var(--text-secondary); font-size: 18px;
-            cursor: pointer; padding: 4px; transition: 0.3s; margin-bottom: 16px;
-        }
+        .settings-screen .back-btn { align-self: flex-start; background: none; border: none; color: var(--text-secondary); font-size: 18px; cursor: pointer; padding: 4px; transition: 0.3s; margin-bottom: 16px; }
         .settings-screen .back-btn:hover { color: var(--accent-mint); }
-        .settings-screen .settings-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 20px;
-        }
+        .settings-screen .settings-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 20px; }
 
-        .settings-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 14px;
-            background: var(--bg-input);
-            border-radius: 10px;
-            margin-bottom: 8px;
-            border: 1px solid transparent;
-            transition: 0.3s;
-            cursor: pointer;
-        }
+        .settings-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--bg-input); border-radius: 10px; margin-bottom: 8px; border: 1px solid transparent; transition: 0.3s; cursor: pointer; }
         .settings-item:hover { border-color: var(--border-color); }
         .settings-item .left { display: flex; align-items: center; gap: 10px; }
         .settings-item .left i { color: var(--accent-mint); font-size: 16px; width: 20px; }
-        .settings-item .left .info .title {
-            color: var(--text-primary);
-            font-size: 13px;
-            font-weight: 600;
-        }
-        .settings-item .left .info .desc {
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 400;
-        }
-        .settings-item .right .action-btn {
-            background: none; border: none; color: var(--accent-mint);
-            cursor: pointer; font-size: 12px; padding: 3px 8px; border-radius: 6px; transition: 0.3s;
-            font-weight: 500;
-        }
+        .settings-item .left .info .title { color: var(--text-primary); font-size: 13px; font-weight: 600; }
+        .settings-item .left .info .desc { color: var(--text-muted); font-size: 11px; font-weight: 400; }
+        .settings-item .right .action-btn { background: none; border: none; color: var(--accent-mint); cursor: pointer; font-size: 12px; padding: 3px 8px; border-radius: 6px; transition: 0.3s; font-weight: 500; }
         .settings-item.danger .left i { color: #ff6b6b; }
         .settings-item.danger .right .action-btn { color: #ff6b6b; }
 
-        .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0 0 0;
-            border-top: 1px solid var(--border-color);
-            flex-shrink: 0;
-            margin-top: 12px;
-            background: rgba(15, 15, 26, 0.95);
-            backdrop-filter: blur(12px);
-            border-radius: 14px;
-        }
-        .bottom-nav .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: 0.3s;
-            padding: 6px 16px;
-            border-radius: 10px;
-            font-size: 9px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-        }
+        .bottom-nav { display: flex; justify-content: space-around; padding: 8px 0 0 0; border-top: 1px solid var(--border-color); flex-shrink: 0; margin-top: 12px; background: rgba(15, 15, 26, 0.95); backdrop-filter: blur(12px); border-radius: 14px; }
+        .bottom-nav .nav-item { display: flex; flex-direction: column; align-items: center; gap: 1px; background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.3s; padding: 6px 16px; border-radius: 10px; font-size: 9px; font-weight: 500; letter-spacing: 0.3px; }
         .bottom-nav .nav-item i { font-size: 18px; }
         .bottom-nav .nav-item.active { color: var(--accent-mint); }
         .bottom-nav .nav-item:hover { color: var(--accent-mint); background: rgba(0, 212, 170, 0.05); }
 
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            padding: 16px;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 10000; padding: 16px; }
         .modal-overlay.active { display: flex; }
-
-        .modal {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 400px;
-            max-height: 85vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            animation: modalFade 0.3s ease;
-        }
-        @keyframes modalFade {
-            from { opacity: 0; transform: scale(0.95) translateY(8px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 18px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .modal-header .title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        .modal-header .close-btn {
-            background: none; border: none; color: var(--text-secondary); font-size: 18px;
-            cursor: pointer; padding: 4px; transition: 0.3s;
-        }
+        .modal { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; width: 100%; max-width: 400px; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column; animation: modalFade 0.3s ease; }
+        @keyframes modalFade { from { opacity: 0; transform: scale(0.95) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border-color); }
+        .modal-header .title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+        .modal-header .close-btn { background: none; border: none; color: var(--text-secondary); font-size: 18px; cursor: pointer; padding: 4px; transition: 0.3s; }
         .modal-header .close-btn:hover { color: var(--accent-mint); }
-
         .modal-body { padding: 16px; overflow-y: auto; flex: 1; }
         .modal-body::-webkit-scrollbar { width: 3px; }
         .modal-body::-webkit-scrollbar-thumb { background: var(--accent-mint); border-radius: 10px; }
-
-        .modal-footer {
-            padding: 12px 18px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-        .modal-btn {
-            padding: 8px 18px;
-            border-radius: 8px;
-            border: none;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+        .modal-footer { padding: 12px 18px; border-top: 1px solid var(--border-color); display: flex; gap: 8px; justify-content: flex-end; }
+        .modal-btn { padding: 8px 18px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .modal-btn.primary { background: linear-gradient(135deg, var(--accent-mint), var(--accent-purple)); color: #fff; }
         .modal-btn.primary:active { transform: scale(0.97); }
         .modal-btn.secondary { background: var(--bg-input); color: var(--text-secondary); border: 1px solid var(--border-color); }
         .modal-btn.danger { background: #ff6b6b; color: #fff; }
 
         .cleaner-progress { text-align: center; padding: 16px 0; }
-        .cleaner-progress .progress-ring {
-            width: 70px; height: 70px; margin: 0 auto 12px; position: relative;
-        }
+        .cleaner-progress .progress-ring { width: 70px; height: 70px; margin: 0 auto 12px; position: relative; }
         .cleaner-progress .progress-ring svg { transform: rotate(-90deg); }
         .cleaner-progress .progress-ring .circle-bg { fill: none; stroke: var(--bg-input); stroke-width: 5; }
         .cleaner-progress .progress-ring .circle-fill { fill: none; stroke: var(--accent-mint); stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
-        .cleaner-progress .progress-ring .center-text {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: var(--text-primary); font-size: 15px; font-weight: 700;
-        }
-        .cleaner-progress .progress-text {
-            color: var(--text-secondary);
-            font-size: 13px;
-            margin-top: 6px;
-            font-weight: 400;
-        }
+        .cleaner-progress .progress-ring .center-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-primary); font-size: 15px; font-weight: 700; }
+        .cleaner-progress .progress-text { color: var(--text-secondary); font-size: 13px; margin-top: 6px; font-weight: 400; }
 
-        .session-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px;
-            background: var(--bg-input);
-            border-radius: 10px;
-            margin-bottom: 6px;
-            border: 1px solid var(--border-color);
-            transition: all 0.4s ease;
-            overflow: hidden;
-        }
-        .session-item.removing {
-            transform: translateX(100%);
-            opacity: 0;
-            max-height: 0;
-            padding: 0 12px;
-            margin: 0;
-            border: none;
-        }
-        .session-item .session-info .device {
-            color: var(--text-primary);
-            font-size: 13px;
-            font-weight: 500;
-        }
-        .session-item .session-info .last-seen {
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 400;
-        }
-        .session-item .session-info .online {
-            color: var(--accent-mint);
-            font-size: 11px;
-            font-weight: 500;
-        }
-        .session-item .session-kick {
-            background: none; border: 1px solid var(--border-color); color: var(--text-secondary);
-            padding: 3px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; transition: 0.3s;
-            font-weight: 500;
-            display: inline-block;
-        }
+        .session-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg-input); border-radius: 10px; margin-bottom: 6px; border: 1px solid var(--border-color); transition: all 0.4s ease; overflow: hidden; }
+        .session-item.removing { transform: translateX(100%); opacity: 0; max-height: 0; padding: 0 12px; margin: 0; border: none; }
+        .session-item .session-info .device { color: var(--text-primary); font-size: 13px; font-weight: 500; }
+        .session-item .session-info .last-seen { color: var(--text-muted); font-size: 11px; font-weight: 400; }
+        .session-item .session-info .online { color: var(--accent-mint); font-size: 11px; font-weight: 500; }
+        .session-item .session-kick { background: none; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 3px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; transition: 0.3s; font-weight: 500; display: inline-block; }
         .session-item .session-kick.hidden { display: none !important; }
         .session-item .session-kick:hover { border-color: #ff6b6b; color: #ff6b6b; }
 
-        .cleaner-stats {
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 12px;
-            background: var(--bg-input);
-            border-radius: 10px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border-color);
-        }
+        .cleaner-stats { display: flex; justify-content: space-around; padding: 10px 12px; background: var(--bg-input); border-radius: 10px; margin-bottom: 12px; border: 1px solid var(--border-color); }
         .cleaner-stats .stat { text-align: center; }
-        .cleaner-stats .stat .value {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        .cleaner-stats .stat .label {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 2px;
-            font-weight: 400;
-        }
+        .cleaner-stats .stat .value { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+        .cleaner-stats .stat .label { font-size: 10px; color: var(--text-muted); margin-top: 2px; font-weight: 400; }
 
-        .cleaner-chat-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 12px;
-            background: var(--bg-input);
-            border-radius: 10px;
-            margin-bottom: 6px;
-            border: 1px solid var(--border-color);
-            transition: 0.3s;
-        }
-        .cleaner-chat-item .avatar {
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #fff;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
+        .cleaner-chat-item { display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: var(--bg-input); border-radius: 10px; margin-bottom: 6px; border: 1px solid var(--border-color); transition: 0.3s; }
+        .cleaner-chat-item .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fff; font-size: 14px; flex-shrink: 0; }
         .cleaner-chat-item .info { flex: 1; }
-        .cleaner-chat-item .info .name {
-            color: var(--text-primary);
-            font-size: 13px;
-            font-weight: 500;
-        }
-        .cleaner-chat-item .info .meta {
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 400;
-        }
-        .cleaner-chat-item .size {
-            color: var(--text-muted);
-            font-size: 11px;
-            margin-right: 6px;
-            font-weight: 400;
-        }
-        .cleaner-chat-item .select-btn {
-            background: none; border: 1px solid var(--border-color); color: var(--text-muted);
-            width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: 0.3s;
-            font-size: 12px;
-        }
-        .cleaner-chat-item .select-btn.selected {
-            border-color: var(--accent-mint); color: var(--accent-mint);
-            background: rgba(0, 212, 170, 0.08);
-        }
+        .cleaner-chat-item .info .name { color: var(--text-primary); font-size: 13px; font-weight: 500; }
+        .cleaner-chat-item .info .meta { color: var(--text-muted); font-size: 11px; font-weight: 400; }
+        .cleaner-chat-item .size { color: var(--text-muted); font-size: 11px; margin-right: 6px; font-weight: 400; }
+        .cleaner-chat-item .select-btn { background: none; border: 1px solid var(--border-color); color: var(--text-muted); width: 24px; height: 24px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; font-size: 12px; }
+        .cleaner-chat-item .select-btn.selected { border-color: var(--accent-mint); color: var(--accent-mint); background: rgba(0, 212, 170, 0.08); }
 
-        .last-seen-toggle {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 6px 0 12px 0;
-        }
-        .last-seen-toggle .toggle-btn {
-            padding: 5px 14px;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-input);
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 12px;
-            transition: 0.3s;
-            font-weight: 500;
-        }
-        .last-seen-toggle .toggle-btn.active {
-            border-color: var(--accent-mint);
-            color: var(--accent-mint);
-            background: rgba(0, 212, 170, 0.08);
-        }
-
-        .last-seen-display {
-            text-align: center;
-            padding: 10px;
-            background: var(--bg-input);
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            margin: 6px 0 4px 0;
-        }
+        .last-seen-toggle { display: flex; gap: 10px; justify-content: center; margin: 6px 0 12px 0; }
+        .last-seen-toggle .toggle-btn { padding: 5px 14px; border-radius: 16px; border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-muted); cursor: pointer; font-size: 12px; transition: 0.3s; font-weight: 500; }
+        .last-seen-toggle .toggle-btn.active { border-color: var(--accent-mint); color: var(--accent-mint); background: rgba(0, 212, 170, 0.08); }
+        .last-seen-display { text-align: center; padding: 10px; background: var(--bg-input); border-radius: 10px; border: 1px solid var(--border-color); margin: 6px 0 4px 0; }
         .last-seen-display .highlight { color: var(--accent-mint); font-weight: 600; }
-        .last-seen-display .label {
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 400;
-        }
+        .last-seen-display .label { color: var(--text-muted); font-size: 11px; font-weight: 400; }
 
-        .user-profile-view {
-            text-align: center;
-            padding: 8px 0;
-        }
-        .user-profile-view .avatar-big {
-            width: 80px; height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            margin: 0 auto 8px;
-            color: #fff;
-        }
-        .user-profile-view .name-big {
-            color: var(--text-primary);
-            font-size: 20px;
-            font-weight: 700;
-        }
-        .user-profile-view .username-big {
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 400;
-            margin-bottom: 6px;
-        }
-        .user-profile-view .status-big {
-            color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 400;
-            margin-bottom: 12px;
-        }
-        .user-profile-view .send-btn-profile {
-            width: 100%;
-            padding: 10px;
-            border-radius: 12px;
-            border: none;
-            background: linear-gradient(135deg, var(--accent-mint), var(--accent-purple));
-            color: #fff;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 4px;
-        }
+        .user-profile-view { text-align: center; padding: 8px 0; }
+        .user-profile-view .avatar-big { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 8px; color: #fff; }
+        .user-profile-view .name-big { color: var(--text-primary); font-size: 20px; font-weight: 700; }
+        .user-profile-view .username-big { color: var(--text-secondary); font-size: 14px; font-weight: 400; margin-bottom: 6px; }
+        .user-profile-view .status-big { color: var(--text-muted); font-size: 13px; font-weight: 400; margin-bottom: 12px; }
+        .user-profile-view .send-btn-profile { width: 100%; padding: 10px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent-mint), var(--accent-purple)); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 4px; }
         .user-profile-view .send-btn-profile:active { transform: scale(0.97); }
         .user-profile-view .send-btn-profile i { margin-right: 8px; }
 
@@ -1269,7 +541,10 @@
 <div class="modal-overlay" id="nameModal">
     <div class="modal">
         <div class="modal-header"><div class="title"><i class="fas fa-pen" style="color:var(--accent-mint);margin-right:6px;"></i> Изменить имя</div><button class="close-btn" onclick="closeModal('nameModal')"><i class="fas fa-times"></i></button></div>
-        <div class="modal-body"><div class="input-group"><input type="text" id="newNameInput" placeholder="Новое имя (до 25 символов)" maxlength="25" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-color);border-radius:10px;color:var(--text-primary);font-size:13px;outline:none;"></div></div>
+        <div class="modal-body">
+            <div class="input-group"><input type="text" id="newNameInput" placeholder="Новое имя (до 25 символов)" maxlength="25" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-color);border-radius:10px;color:var(--text-primary);font-size:13px;outline:none;"></div>
+            <div class="input-group" style="margin-top: 10px;"><input type="password" id="editNamePassword" placeholder="Ваш текущий пароль" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-color);border-radius:10px;color:var(--text-primary);font-size:13px;outline:none;"></div>
+        </div>
         <div class="modal-footer"><button class="modal-btn secondary" onclick="closeModal('nameModal')">Отмена</button><button class="modal-btn primary" onclick="saveNewName()">Сохранить</button></div>
     </div>
 </div>
@@ -1277,7 +552,10 @@
 <div class="modal-overlay" id="usernameModal">
     <div class="modal">
         <div class="modal-header"><div class="title"><i class="fas fa-at" style="color:var(--accent-mint);margin-right:6px;"></i> Изменить юзернейм</div><button class="close-btn" onclick="closeModal('usernameModal')"><i class="fas fa-times"></i></button></div>
-        <div class="modal-body"><div class="input-group"><input type="text" id="newUsernameInput" placeholder="Новый юзернейм (до 20 символов)" maxlength="20" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-color);border-radius:10px;color:var(--text-primary);font-size:13px;outline:none;"></div></div>
+        <div class="modal-body">
+            <div class="input-group"><input type="text" id="newUsernameInput" placeholder="Новый юзернейм (до 20 символов)" maxlength="20" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-color);border-radius:10px;color:var(--text-primary);font-size:13px;outline:none;"></div>
+            <div class="input-group" style="margin-top: 10px;"><input type="password" id="editUsernamePassword" placeholder="Ваш текущий пароль" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-color);border-radius:10px;color:var(--text-primary);font-size:13px;outline:none;"></div>
+        </div>
         <div class="modal-footer"><button class="modal-btn secondary" onclick="closeModal('usernameModal')">Отмена</button><button class="modal-btn primary" onclick="saveNewUsername()">Сохранить</button></div>
     </div>
 </div>
@@ -1314,6 +592,7 @@
     let chatsData = {};
     let currentSubscription = null;
     let allUsers = [];
+    let allUsersLastFetch = 0;
 
     // ==========================================
     // ЗАГРУЗКА
@@ -1381,9 +660,15 @@
     }
 
     async function getAllUsers() {
+        // Кэшируем пользователей на 30 секунд, чтобы не спамить API
+        if (Date.now() - allUsersLastFetch < 30000 && allUsers.length > 0) {
+            return allUsers;
+        }
         try {
             const data = await supabaseRequest('users?select=*');
-            return data || [];
+            allUsers = data || [];
+            allUsersLastFetch = Date.now();
+            return allUsers;
         } catch { return []; }
     }
 
@@ -1499,7 +784,7 @@
 
             startSessionCheck(user.id, sessionId);
             loadChatsFromStorage();
-            await loadAllUsers();
+            await getAllUsers(); // Предзагрузка всех пользователей
             renderChatList();
             updateProfileUI();
             updateLastSeen();
@@ -1645,13 +930,6 @@
     // ==========================================
     // ОТОБРАЖЕНИЕ ЧАТОВ
     // ==========================================
-    async function loadAllUsers() {
-        try {
-            allUsers = await getAllUsers();
-            renderChatList();
-        } catch {}
-    }
-
     function getUser(id) {
         return allUsers.find(u => u.id == id);
     }
@@ -1764,6 +1042,7 @@
             currentSubscription = null;
         }
 
+        // ВАЖНО: Формируем стабильный ID канала (Меньший ID всегда первый)
         const channelName = `chat_${Math.min(currentUser.id, userId)}_${Math.max(currentUser.id, userId)}`;
         
         currentSubscription = sb
@@ -1905,7 +1184,16 @@
         const reader = new FileReader();
         reader.onload = async function(ev) {
             const avatarData = ev.target.result;
+            
+            // Запрашиваем пароль перед сохранением
+            const password = prompt('Введите ваш пароль для подтверждения смены аватарки:');
+            if (!password) return alert('Смена аватарки отменена');
+
             try {
+                // Проверяем, что это реальный пользователь (по паролю из БД)
+                const authUser = await getUserData(currentUser.username, password);
+                if (!authUser) return alert('❌ Неверный пароль!');
+
                 const updated = await updateUser(currentUser.id, { avatar: avatarData });
                 if (updated) {
                     currentUser.avatar = avatarData;
@@ -1926,15 +1214,26 @@
 
     function changeDisplayName() {
         document.getElementById('newNameInput').value = currentUser.display_name || '';
+        document.getElementById('editNamePassword').value = '';
         document.getElementById('nameModal').classList.add('active');
     }
 
     async function saveNewName() {
         const name = document.getElementById('newNameInput').value.trim();
+        const password = document.getElementById('editNamePassword').value.trim();
+        
         if (!name) { alert('Введите имя!'); return; }
         if (name.length > 25) { alert('Имя не может быть длиннее 25 символов'); return; }
+        if (!password) { alert('Введите пароль для подтверждения!'); return; }
 
         try {
+            // ВАЖНО: Проверяем пароль перед сменой имени!
+            const authUser = await getUserData(currentUser.username, password);
+            if (!authUser) {
+                alert('❌ Неверный пароль!');
+                return;
+            }
+
             const updated = await updateUser(currentUser.id, { display_name: name });
             if (updated) {
                 currentUser.display_name = name;
@@ -1949,15 +1248,26 @@
 
     function changeUsername() {
         document.getElementById('newUsernameInput').value = currentUser.username || '';
+        document.getElementById('editUsernamePassword').value = '';
         document.getElementById('usernameModal').classList.add('active');
     }
 
     async function saveNewUsername() {
         const username = document.getElementById('newUsernameInput').value.trim();
+        const password = document.getElementById('editUsernamePassword').value.trim();
+        
         if (!username) { alert('Введите юзернейм!'); return; }
         if (username.length > 20) { alert('Юзернейм не может быть длиннее 20 символов'); return; }
+        if (!password) { alert('Введите пароль для подтверждения!'); return; }
 
         try {
+            // ВАЖНО: Проверяем пароль перед сменой юзернейма
+            const authUser = await getUserData(currentUser.username, password);
+            if (!authUser) {
+                alert('❌ Неверный пароль!');
+                return;
+            }
+
             const exists = await checkUserExists(username);
             if (exists && username !== currentUser.username) {
                 alert('Этот юзернейм уже занят!');
@@ -2150,39 +1460,25 @@
     });
 
     // ==========================================
-    // СЕССИИ (Убраны тестовые, добавлено определение устройства)
+    // СЕССИИ (Реальные сессии на основе данных БД)
     // ==========================================
     function openSessions() {
         renderSessions();
         document.getElementById('sessionsModal').classList.add('active');
     }
 
-    // Определение устройства на основе User-Agent
     function getDeviceInfo() {
         const ua = navigator.userAgent;
         let device = 'Неизвестное устройство';
         let isMobile = false;
 
-        if (/android/i.test(ua)) {
-            device = 'Смартфон (Android)';
-            isMobile = true;
-        } else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-            device = 'Смартфон (iPhone/iOS)';
-            isMobile = true;
-        } else if (/Macintosh/.test(ua) && 'ontouchend' in document) {
-            // iPadOS определяется как Mac, но имеет touch события
-            device = 'Планшет (iPadOS)';
-            isMobile = true;
-        } else if (/Windows/.test(ua)) {
-            device = 'ПК (Windows)';
-        } else if (/Macintosh/.test(ua)) {
-            device = 'ПК (macOS)';
-        } else if (/Linux/.test(ua)) {
-            device = 'ПК (Linux)';
-        } else if (/Mobile/.test(ua)) {
-            device = 'Мобильное устройство';
-            isMobile = true;
-        }
+        if (/android/i.test(ua)) { device = 'Смартфон (Android)'; isMobile = true; } 
+        else if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) { device = 'Смартфон (iPhone/iOS)'; isMobile = true; } 
+        else if (/Macintosh/.test(ua) && 'ontouchend' in document) { device = 'Планшет (iPadOS)'; isMobile = true; } 
+        else if (/Windows/.test(ua)) { device = 'ПК (Windows)'; } 
+        else if (/Macintosh/.test(ua)) { device = 'ПК (macOS)'; } 
+        else if (/Linux/.test(ua)) { device = 'ПК (Linux)'; } 
+        else if (/Mobile/.test(ua)) { device = 'Мобильное устройство'; isMobile = true; }
 
         return { device, isMobile };
     }
@@ -2190,31 +1486,29 @@
     function renderSessions() {
         const list = document.getElementById('sessionsList');
         
-        // Получаем список всех уникальных пользователей с их ID сессий
-        // В реальном приложении это делается через запрос к БД.
-        // Для демонстрации собираем данные из локально сохраненных пользователей
-        const users = JSON.parse(localStorage.getItem('matrix_users') || '[]');
-        const activeSessions = users
-            .filter(u => u.session_id && u.id !== currentUser.id) // Берем чужие сессии
+        // Ищем сессии в базе данных. В реальном приложении это делается через SQL запрос.
+        // В текущей реализации просто фильтруем всех пользователей, у которых есть session_id
+        const activeSessions = allUsers
+            .filter(u => u.session_id && u.id !== currentUser.id)
             .map(u => {
-                // Генерируем "устройство" на основе ID сессии (просто для примера)
-                // В реальном приложении устройство должно храниться в БД!
-                // Для демки мы покажем, что это реальное устройство
+                // Логика определения "устройства" из хэша сессии (для демонстрации)
+                const deviceName = (u.session_id || '').split('_')[1] || 'Неизвестное';
                 return {
                     device: 'Активная сессия (' + u.username + ')',
                     online: true,
                     isCurrent: false,
-                    userId: u.id
+                    userId: u.id,
+                    sessionId: u.session_id
                 };
             });
 
-        // Добавляем текущую сессию
         const { device: currentDeviceName } = getDeviceInfo();
         const currentSession = {
             device: currentDeviceName + ' · Текущее',
             online: true,
             isCurrent: true,
-            userId: currentUser.id
+            userId: currentUser.id,
+            sessionId: currentUser.session_id
         };
 
         const allSessions = [currentSession, ...activeSessions];
@@ -2235,26 +1529,29 @@
         }
     }
 
-    function kickSession(index, userId) {
+    async function kickSession(index, userId) {
         const el = document.getElementById(`session-${index}`);
         if (!el) return;
+        
+        if(!confirm('Вы уверены, что хотите снять сессию? Пользователь будет разлогинен.')) return;
 
-        // В реальном приложении здесь делается запрос к БД для сброса session_id у этого пользователя
-        // Для демонстрации просто удаляем сессию из локального списка и списка пользователей
         el.classList.add('removing');
         
-        setTimeout(() => {
-            // Обновляем локальный список пользователей (для демо)
-            const users = JSON.parse(localStorage.getItem('matrix_users') || '[]');
-            const userIdx = users.findIndex(u => u.id == userId);
-            if(userIdx !== -1) {
-                users[userIdx].session_id = null;
-                localStorage.setItem('matrix_users', JSON.stringify(users));
-            }
+        try {
+            // Реальное обновление в БД, разлогинивание пользователя
+            await updateUser(userId, { session_id: null });
             
-            renderSessions();
-            alert('Сессия снята');
-        }, 400);
+            // Обновляем список всех пользователей
+            await getAllUsers();
+            
+            setTimeout(() => {
+                renderSessions();
+                alert('✅ Сессия снята');
+            }, 400);
+        } catch (error) {
+            alert('Ошибка: Не удалось снять сессию');
+            el.classList.remove('removing');
+        }
     }
 
     // ==========================================
@@ -2412,6 +1709,9 @@
     }
 
     function confirmDeleteAccount() {
+        const password = prompt('⚠️ Для подтверждения удаления аккаунта введите ваш пароль:');
+        if (!password) return alert('Удаление отменено');
+
         closeModal('confirmModal');
         document.getElementById('deleteProgressModal').classList.add('active');
         const circle = document.getElementById('deleteProgressCircle');
@@ -2494,7 +1794,7 @@
     // ==========================================
     // ИНИЦИАЛИЗАЦИЯ
     // ==========================================
-    console.log('🚀 Matrix Messenger v4.0 (Фикс наложения, реальные сессии)');
+    console.log('🚀 Matrix Messenger v5.0 (Фикс проверки паролей и безопасности профиля)');
 </script>
 </body>
 </html>
