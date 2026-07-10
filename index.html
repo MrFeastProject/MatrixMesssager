@@ -6,9 +6,6 @@
     <title>Matrix Messenger</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* ========================================= */
-        /* ДИЗАЙН BLACK COSMOS (С НУЛЯ)              */
-        /* ========================================= */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
         * {
@@ -44,7 +41,6 @@
             color: var(--text-main);
         }
 
-        /* ФОН СО ЗВЕЗДАМИ */
         .cosmos {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -59,12 +55,8 @@
             background-size: 200px 200px;
             animation: twinkle 8s ease-in-out infinite alternate;
         }
-        @keyframes twinkle {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+        @keyframes twinkle { 0% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* ГРАДИЕНТНЫЙ ОРЕОЛ */
         .glow-orb {
             position: absolute;
             top: -15%; left: 50%;
@@ -76,10 +68,7 @@
             pointer-events: none;
             animation: pulseGlow 10s ease-in-out infinite alternate;
         }
-        @keyframes pulseGlow {
-            0% { transform: translateX(-50%) scale(1); opacity: 0.6; }
-            100% { transform: translateX(-50%) scale(1.1); opacity: 1; }
-        }
+        @keyframes pulseGlow { 0% { transform: translateX(-50%) scale(1); opacity: 0.6; } 100% { transform: translateX(-50%) scale(1.1); opacity: 1; } }
 
         .app-wrap {
             position: relative;
@@ -285,7 +274,7 @@
         .chat-window .ch-header .user { display: flex; align-items: center; gap: 10px; flex: 1; cursor: pointer; max-width: 85%; }
         .chat-window .ch-header .user .av { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fff; font-size: 14px; flex-shrink: 0; }
         .chat-window .ch-header .user .nm { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .chat-window .ch-header .user .st { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+        .chat-window .ch-header .user .st { font-size: 10px; color: var(--text-dim); white-space: nowrap; }
         
         .msg-list {
             flex: 1; overflow-y: auto; padding: 12px 0; display: flex; flex-direction: column; gap: 6px;
@@ -474,7 +463,14 @@
         }
         .session-item.rem { transform: translateX(100%); opacity: 0; max-height: 0; padding: 0 12px; margin: 0; border: none; }
         .session-item .inf .dev { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 85%; }
-        .session-item .inf .on { font-size: 10px; color: var(--accent); }
+        
+        /* Стили статуса "В сети" */
+        .session-item .inf .on { font-size: 10px; display: flex; align-items: center; gap: 4px; color: var(--accent); }
+        .session-item .inf .on .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+        .session-item .inf .off { font-size: 10px; display: flex; align-items: center; gap: 4px; color: var(--text-muted); }
+        .session-item .inf .off .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); }
+        .session-item .inf .ago { font-size: 10px; color: var(--text-muted); margin-left: 2px; }
+
         .session-item .kick {
             background: none; border: 1px solid var(--border-subtle); color: var(--text-dim);
             padding: 2px 10px; border-radius: 6px; cursor: pointer; font-size: 10px; transition: 0.3s;
@@ -508,9 +504,9 @@
     <div class="screen auth-screen" id="screenAuth">
         <div class="brand"><i class="fas fa-cube"></i> Matrix</div>
         <div class="sub">Messenger</div>
-        <div class="input-group"><input type="text" id="inpLogin" placeholder="Никнейм"></div>
+        <div class="input-group"><input type="text" id="inpLogin" placeholder="Никнейм" autocomplete="off"></div>
         <div class="input-group">
-            <input type="password" id="inpPass" placeholder="Пароль">
+            <input type="password" id="inpPass" placeholder="Пароль" autocomplete="new-password">
             <button class="eye" onclick="togglePass()"><i class="fas fa-eye" id="passIcon"></i></button>
         </div>
         <button class="btn btn-primary" onclick="handleLogin()">Вход</button>
@@ -522,12 +518,12 @@
     <div class="screen auth-screen" id="screenReg">
         <div class="brand"><i class="fas fa-cube"></i> Matrix</div>
         <div class="sub">Создание аккаунта</div>
-        <div class="input-group"><input type="text" id="regLogin" placeholder="Никнейм (до 20 симв.)"></div>
+        <div class="input-group"><input type="text" id="regLogin" placeholder="Никнейм (до 20 симв.)" autocomplete="off"></div>
         <div class="input-group">
-            <input type="password" id="regPass" placeholder="Пароль">
+            <input type="password" id="regPass" placeholder="Пароль" autocomplete="new-password">
             <button class="eye" onclick="toggleRegPass()"><i class="fas fa-eye" id="regPassIcon"></i></button>
         </div>
-        <div class="input-group"><input type="text" id="regName" placeholder="Ваше имя (до 25 симв.)"></div>
+        <div class="input-group"><input type="text" id="regName" placeholder="Ваше имя (до 25 симв.)" autocomplete="off"></div>
         <button class="btn btn-primary" onclick="handleReg()"><i class="fas fa-user-plus"></i> Создать</button>
         <button class="btn btn-ghost" onclick="showLogin()">Назад к входу</button>
         <div class="auth-status" id="regStatus"></div>
@@ -566,7 +562,7 @@
         </div>
         <div class="msg-list" id="msgList"></div>
         <div class="chat-input-area">
-            <input type="text" placeholder="Сообщение..." id="chatInput">
+            <input type="text" placeholder="Сообщение..." id="chatInput" autocomplete="off">
             <button class="snd" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
@@ -772,6 +768,44 @@
     }
 
     /* =========================================
+       АВТОМАТИЧЕСКАЯ ИНИЦИАЛИЗАЦИЯ / ПРОГРУЗКА
+    ========================================= */
+    let lp = 0;
+    const loadInt = setInterval(async () => {
+        lp += Math.random() * 2 + 1;
+        if(lp >= 100) {
+            lp = 100;
+            clearInterval(loadInt);
+            document.getElementById('loadFill').style.width = lp + '%';
+            document.getElementById('loadPct').textContent = Math.floor(lp);
+            
+            // Проверяем, не залогинен ли уже пользователь
+            const savedUserId = localStorage.getItem('matrix_user_id');
+            if(savedUserId) {
+                // Ищем пользователя в базе
+                const check = await sb.from('users').select('*').eq('id', savedUserId);
+                if(check.data && check.data.length > 0) {
+                    const user = check.data[0];
+                    // Проверяем, жива ли сессия
+                    if(user.session_id) {
+                        sessionId = user.session_id;
+                        currentUser = user;
+                        document.getElementById('screenLoading').classList.remove('active');
+                        initApp();
+                        return;
+                    }
+                }
+            }
+            
+            // Если не залогинен — показываем вход
+            document.getElementById('screenLoading').classList.remove('active');
+            document.getElementById('screenAuth').classList.add('active');
+        }
+        document.getElementById('loadFill').style.width = lp + '%';
+        document.getElementById('loadPct').textContent = Math.floor(lp);
+    }, 25);
+
+    /* =========================================
        НАВИГАЦИЯ ЭКРАНОВ
     ========================================= */
     function switchScreen(id) {
@@ -785,17 +819,6 @@
 
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
     document.querySelectorAll('.modal-overlay').forEach(el => el.addEventListener('click', function(e) { if(e.target===this) this.classList.remove('active'); }));
-
-    /* =========================================
-       ЗАГРУЗКА
-    ========================================= */
-    let lp = 0;
-    const loadInt = setInterval(() => {
-        lp += Math.random() * 2 + 1;
-        if(lp >= 100) { lp = 100; clearInterval(loadInt); document.getElementById('screenLoading').classList.remove('active'); document.getElementById('screenAuth').classList.add('active'); }
-        document.getElementById('loadFill').style.width = lp + '%';
-        document.getElementById('loadPct').textContent = Math.floor(lp);
-    }, 25);
 
     /* =========================================
        АВТОРИЗАЦИЯ
@@ -826,6 +849,8 @@
             sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
             await sb.from('users').update({ session_id: sessionId, last_seen: new Date().toISOString() }).eq('id', user.id);
             currentUser = user;
+            // Сохраняем ID в LS для авто-входа
+            localStorage.setItem('matrix_user_id', user.id);
             s.className = 'auth-status ok'; s.textContent = '✅ Вход выполнен!';
             setTimeout(() => { document.getElementById('screenAuth').classList.remove('active'); initApp(); }, 400);
         } catch(e) { s.className = 'auth-status err'; s.textContent = '❌ Ошибка сервера!'; }
@@ -852,12 +877,14 @@
     }
 
     async function handleLogout() {
-        // Фикс: очищаем сессию в базе и только потом выходим
+        // Очищаем сессию в базе
         if(currentUser) {
             await sb.from('users').update({ session_id: null }).eq('id', currentUser.id);
         }
         if(sessionInterval) clearInterval(sessionInterval);
         if(sub) sb.removeChannel(sub);
+        // Удаляем авто-вход
+        localStorage.removeItem('matrix_user_id');
         currentUser = null; sessionId = null;
         document.getElementById('screenMain').classList.remove('active');
         document.getElementById('screenProfile').classList.remove('active');
@@ -912,15 +939,15 @@
     async function openSessions() {
         const list = document.getElementById('sessList');
         const currentDevice = getDeviceModel();
-        let html = `<div class="session-item"><div class="inf"><div class="dev"><i class="fas fa-circle" style="color:var(--accent);font-size:8px;"></i> ${currentDevice} · Текущее</div><div class="on">🟢 В онлайне</div></div><button class="kick hid">Снять</button></div>`;
+        let html = `<div class="session-item"><div class="inf"><div class="dev"><i class="fas fa-circle" style="color:var(--accent);font-size:8px;"></i> ${currentDevice} · Текущее</div><div class="on"><span class="dot"></span> В онлайне</div></div><button class="kick hid">Снять</button></div>`;
         try {
             const all = await sb.from('users').select('id, username, display_name, session_id, last_seen').not('session_id', 'is', null);
             if(all.data) {
                 all.data.forEach(u => {
                     if(u.id == currentUser.id) return;
                     const time = u.last_seen ? formatTimeAgo(new Date(u.last_seen).getTime()) : 'недавно';
-                    // Фикс: показываем устройство, а не имя пользователя
-                    html += `<div class="session-item"><div class="inf"><div class="dev"><i class="fas fa-circle" style="color:var(--accent);font-size:8px;"></i> ${u.display_name || u.username} (Активная сессия)</div><div class="on">🟢 В онлайне · ${time}</div></div><button class="kick" onclick="kickSession('${u.id}')">Снять</button></div>`;
+                    // Показываем устройство
+                    html += `<div class="session-item"><div class="inf"><div class="dev"><i class="fas fa-circle" style="color:var(--accent);font-size:8px;"></i> ${u.display_name || u.username}</div><div class="on"><span class="dot"></span> В онлайне · ${time}</div></div><button class="kick" onclick="kickSession('${u.id}')">Снять</button></div>`;
                 });
             }
         } catch(e) {}
@@ -929,8 +956,7 @@
     }
 
     async function kickSession(uid) {
-        // Заменяем confirm на кастомный тост и подтверждение через новую модалку (для упрощения пока используем тост + действие)
-        if(!confirm('Снять сессию этого пользователя?')) return; // Это можно позже заменить на отдельную кастомную модалку, если нужно
+        if(!confirm('Снять сессию этого пользователя?')) return;
         await sb.from('users').update({ session_id: null }).eq('id', uid);
         toast('Сессия снята', 'Устройство отключено', 'succ');
         openSessions();
@@ -1020,7 +1046,7 @@
         document.getElementById('chatUserName').textContent = name;
         document.getElementById('chatUserAv').style.background = color;
         document.getElementById('chatUserAv').textContent = avatar;
-        document.getElementById('chatUserStatus').textContent = 'онлайн';
+        document.getElementById('chatUserStatus').textContent = '🟢 Онлайн';
         document.getElementById('screenMain').classList.remove('active');
         document.getElementById('screenChat').classList.add('active');
         document.getElementById('chatInput').disabled = false;
@@ -1163,7 +1189,7 @@
     }
 
     /* =========================================
-       ПОИСК ЛЮДЕЙ (СУПАБАСЕ)
+       ПОИСК ЛЮДЕЙ
     ========================================= */
     function openSearch() {
         document.getElementById('modSearch').classList.add('active');
@@ -1261,7 +1287,7 @@
        HOTKEYS / INIT
     ========================================= */
     document.querySelectorAll('.modal-overlay').forEach(el => el.addEventListener('click', function(e) { if(e.target === this) this.classList.remove('active'); }));
-    console.log('🚀 Matrix Cosmos v1.1 | WebSocket + Supabase');
+    console.log('🚀 Matrix Cosmos v1.2 | WebSocket + Supabase');
 </script>
 </body>
 </html>
